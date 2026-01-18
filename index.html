@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="css/leaflet.css">
+    <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+    <link rel="stylesheet" href="css/qgis2web.css">
+    <link rel="stylesheet" href="css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="css/leaflet.photon.css">
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            overflow-y: auto;
+        }
+        #map-container {
+            width: 100%;
+            height: 600px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        #map-main {
+            width: 80%;
+            height: 100%;
+            float: left;
+        }
+        #map-okinawa {
+            width: 10%;
+            height: 17%;
+            position: absolute;
+            right: 40%;
+            top: 83%;
+            border: 2px solid #000;
+            background-color: #f9f9f9;
+            z-index: 1000;
+        }
+        .leaflet-label {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 2px 4px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            pointer-events: none;
+        }
+        #hover-label {
+            position: fixed;
+            right: 20px;
+            top: 30%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.85);
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-family: sans-serif;
+            font-size: 16px;
+            pointer-events: none;
+            z-index: 9999;
+            width: 150px;
+            text-align: center;
+            left: 50%;
+            transform: translateX(-130%) translateY(-130%);
+        }
+    </style>
+    <title>Carte du Japon avec Okinawa</title>
+    </head>
+    <body>
+        <div id="map-container">
+            <div id="map-main"></div>
+            <div id="map-okinawa"></div>
+            <div id="hover-label">Découvrir une préfecture</div>
+        </div>
+
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/L.Control.Layers.Tree.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet.photon.js"></script>
+        <script src="data/j_go_japon_0.js"></script>
+        <script src="data/okinawaj_go_japon_0.js"></script>
+        <script>
+            // Désactive le comportement de la molette sur la carte pour éviter les conflits
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('map-container').addEventListener('wheel', function(e) {
+                    e.preventDefault();
+                    window.scrollBy(0, e.deltaY);
+                }, { passive: false });
+            });
+
+            // Carte principale du Japon
+            var mapMain = L.map('map-main', {
+                zoomControl: false,
+                maxZoom: 5.37,
+                minZoom: 5.37,
+                dragging: false,
+                scrollWheelZoom: false,
+                doubleClickZoom: false,
+                boxZoom: false,
+                keyboard: false,
+                touchZoom: false
+            }).setView([38.2048, 132.2529], 5); // Centré sur le Japon
+
+            function highlightFeature(e) {
+                var layer = e.target;
+                if (layer.feature.properties.propose === 1) {
+                    layer.setStyle({
+                        weight: 3,
+                        color: '#E60B0B',
+                        fillColor: '#E60B0B',
+                        fillOpacity: 0.7
+                    });
+                    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                        layer.bringToFront();
+                    }
+                }
+            }
+
+            function pop_j_go_japon_0(feature, layer) {
+                if (feature.properties.propose === 1) {
+                    layer.on({
+                        mouseover: function(e) {
+                            document.getElementById('hover-label').innerHTML = feature.properties.NAME_1;
+                            highlightFeature(e);
+                        },
+                        mouseout: function(e) {
+                            document.getElementById('hover-label').innerHTML = 'Découvrir';
+                            layer.setStyle(style_j_go_japon_0_0(feature));
+                        },
+                        click: function(e) {
+                            var url = 'https://www.jgojapon.fr/prefectures/' + encodeURIComponent(feature.properties.NAME_1.toLowerCase());
+                            window.open(url, '_blank');
+                        }
+                    });
+                }
+            }
+
+            function style_j_go_japon_0_0(feature) {
+                switch(String(feature.properties['propose'])) {
+                    case '0':
+                        return {
+                            pane: 'pane_j_go_japon_0',
+                            opacity: 1,
+                            color: 'rgba(52,52,52,1.0)',
+                            dashArray: '',
+                            lineCap: 'butt',
+                            lineJoin: 'miter',
+                            weight: 1.0,
+                            fill: true,
+                            fillOpacity: 1,
+                            fillColor: 'rgba(0,0,0,1.0)',
+                            interactive: false,
+                        }
+                        break;
+                    case '1':
+                        return {
+                            pane: 'pane_j_go_japon_0',
+                            opacity: 1,
+                            color: 'rgba(52,52,52,1.0)',
+                            dashArray: '',
+                            lineCap: 'butt',
+                            lineJoin: 'miter',
+                            weight: 1.0,
+                            fill: true,
+                            fillOpacity: 1,
+                            fillColor: 'rgba(255,215,0,1.0)',
+                            interactive: true,
+                        }
+                        break;
+                    default:
+                        return {
+                            pane: 'pane_j_go_japon_0',
+                            opacity: 1,
+                            color: 'rgba(52,52,52,1.0)',
+                            dashArray: '',
+                            lineCap: 'butt',
+                            lineJoin: 'miter',
+                            weight: 1.0,
+                            fill: true,
+                            fillOpacity: 1,
+                            fillColor: 'rgba(207,84,125,1.0)',
+                            interactive: false,
+                        }
+                        break;
+                }
+            }
+
+            mapMain.createPane('pane_j_go_japon_0');
+            mapMain.getPane('pane_j_go_japon_0').style.zIndex = 400;
+            mapMain.getPane('pane_j_go_japon_0').style['mix-blend-mode'] = 'normal';
+
+            var layer_j_go_japon_0 = new L.geoJson(json_j_go_japon_0, {
+                attribution: '',
+                interactive: true,
+                dataVar: 'json_j_go_japon_0',
+                layerName: 'layer_j_go_japon_0',
+                pane: 'pane_j_go_japon_0',
+                onEachFeature: pop_j_go_japon_0,
+                style: style_j_go_japon_0_0,
+            });
+
+            layer_j_go_japon_0.addTo(mapMain);
+
+            // Carte pour Okinawa
+            var mapOkinawa = L.map('map-okinawa', {
+                zoomControl: false,
+                maxZoom: 7,
+                minZoom: 7,
+                dragging: false,
+                scrollWheelZoom: false,
+                doubleClickZoom: false,
+                boxZoom: false,
+                keyboard: false,
+                touchZoom: false
+            }).setView([26.46, 127.8], 7);
+
+            function pop_okinawaj_go_japon_0(feature, layer) {
+    layer.on({
+        mouseover: function(e) {
+            document.getElementById('hover-label').innerHTML = feature.properties.NAME_1;
+            highlightFeature(e);
+        },
+        mouseout: function(e) {
+            document.getElementById('hover-label').innerHTML = 'Découvrir';
+            layer.setStyle(style_okinawaj_go_japon_0_0(feature));
+        },
+        click: function(e) {
+            window.open(
+                'https://www.jgojapon.fr/prefectures/okinawa',
+                '_blank'
+            );
+        }
+    });
+}
+
+            function style_okinawaj_go_japon_0_0() {
+                return {
+                    pane: 'pane_okinawaj_go_japon_0',
+                    opacity: 1,
+                    color: 'rgba(35,35,35,1.0)',
+                    dashArray: '',
+                    lineCap: 'butt',
+                    lineJoin: 'miter',
+                    weight: 1.0,
+                    fill: true,
+                    fillOpacity: 1,
+                    fillColor: 'rgba(255,215,0,0.9803921568627451)',
+                    interactive: true,
+                }
+            }
+
+            mapOkinawa.createPane('pane_okinawaj_go_japon_0');
+            mapOkinawa.getPane('pane_okinawaj_go_japon_0').style.zIndex = 400;
+            mapOkinawa.getPane('pane_okinawaj_go_japon_0').style['mix-blend-mode'] = 'normal';
+
+            var layer_okinawaj_go_japon_0 = new L.geoJson(json_okinawaj_go_japon_0, {
+                attribution: '',
+                interactive: true,
+                dataVar: 'okinawaj_go_japon_0',
+                layerName: 'layer_okinawaj_go_japon_0',
+                pane: 'pane_okinawaj_go_japon_0',
+                onEachFeature: pop_okinawaj_go_japon_0,
+                style: style_okinawaj_go_japon_0_0,
+            });
+
+            layer_okinawaj_go_japon_0.addTo(mapOkinawa);
+        </script>
+    </body>
+</html>
