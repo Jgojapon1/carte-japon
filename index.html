@@ -39,7 +39,7 @@
             right: 40%;
             top: 83%;
             border: 2px solid #000;
-            background-color: #f9f9f9;
+            background-color: transparent;
             z-index: 1000;
             background-color: transparent !important;
         }
@@ -246,20 +246,20 @@
 }
 
             function style_okinawaj_go_japon_0_0() {
-                return {
-                    pane: 'pane_okinawaj_go_japon_0',
-                    opacity: 1,
-                    color: 'rgba(35,35,35,1.0)',
-                    dashArray: '',
-                    lineCap: 'butt',
-                    lineJoin: 'miter',
-                    weight: 1.0,
-                    fill: true,
-                    fillOpacity: 1,
-                    fillColor: 'rgba(255,215,0,1.0)',
-                    interactive: true,
-                }
-            }
+    return {
+        pane: 'pane_okinawaj_go_japon_0',
+        opacity: 1,
+        color: 'rgba(35,35,35,1.0)',       // contour visible
+        dashArray: '',
+        lineCap: 'butt',
+        lineJoin: 'miter',
+        weight: 1.0,
+        fill: true,
+        fillOpacity: 1,                    // couleur jaune visible
+        fillColor: 'rgba(255,215,0,1.0)', // jaune
+        interactive: true,
+    };
+}
 
             mapOkinawa.createPane('pane_okinawaj_go_japon_0');
             mapOkinawa.getPane('pane_okinawaj_go_japon_0').style.zIndex = 400;
