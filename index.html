@@ -24,12 +24,13 @@
             width: 100%;
             height: 600px;
             position: relative;
-            margin-bottom: 20px;
+            background-color: transparent !important;
         }
         #map-main {
-            width: 80%;
+            width: 100%;
             height: 100%;
             float: left;
+            background-color: transparent !important;
         }
         #map-okinawa {
             width: 10%;
@@ -40,6 +41,7 @@
             border: 2px solid #000;
             background-color: #f9f9f9;
             z-index: 1000;
+            background-color: transparent !important;
         }
         .leaflet-label {
             background-color: rgba(255, 255, 255, 0.85);
@@ -157,8 +159,8 @@
                             lineJoin: 'miter',
                             weight: 1.0,
                             fill: true,
-                            fillOpacity: 1,
-                            fillColor: 'rgba(0,0,0,1.0)',
+                            fillOpacity: 0,
+                            fillColor: 'rgba(0,0,0,0)',
                             interactive: false,
                         }
                         break;
@@ -253,8 +255,8 @@
                     lineJoin: 'miter',
                     weight: 1.0,
                     fill: true,
-                    fillOpacity: 1,
-                    fillColor: 'rgba(255,215,0,0.9803921568627451)',
+                    fillOpacity: 0,
+                    fillColor: 'rgba(0,0,0,0)',
                     interactive: true,
                 }
             }
