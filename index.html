@@ -92,13 +92,6 @@
         <script src="data/j_go_japon_0.js"></script>
         <script src="data/okinawaj_go_japon_0.js"></script>
         <script>
-            // Désactive le comportement de la molette sur la carte pour éviter les conflits
-            document.addEventListener('DOMContentLoaded', function() {
-                document.getElementById('map-container').addEventListener('wheel', function(e) {
-                    e.preventDefault();
-                    window.scrollBy(0, e.deltaY);
-                }, { passive: false });
-            });
 
             // Carte principale du Japon
             var mapMain = L.map('map-main', {
