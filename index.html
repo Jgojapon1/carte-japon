@@ -142,7 +142,7 @@ var mapMain = L.map('map-main', {
     zoomControl: false,
     maxZoom: isMobile ? 7 : 5.4,
     minZoom: isMobile ? 4 : 5.4,
-    dragging: isMobile,             // ✅ swipe
+    dragging: false,             // ✅ swipe
     scrollWheelZoom: false,
     doubleClickZoom: isMobile,
     boxZoom: false,
@@ -203,7 +203,7 @@ var mapOkinawa = L.map('map-okinawa', {
     zoomControl: false,
     maxZoom: 6.5,
     minZoom: 6.5,
-    dragging: isMobile,
+    dragging: false,
     touchZoom: isMobile
 }).setView([26.46, 127.8], 6.5);
 
