@@ -148,7 +148,7 @@ var mapMain = L.map('map-main', {
     minZoom: isMobile ? 4 : 5.4,
     dragging: false,             // ✅ swipe
     scrollWheelZoom: false,
-    doubleClickZoom: isMobile,
+    doublekZoom: isMobile,
     boxZoom: false,
     keyboard: false,
     touchZoom: isMobile             // ✅ pinch zoom
@@ -179,9 +179,46 @@ function pop_j_go_japon_0(feature, layer) {
                 layer.setStyle(style_j_go_japon_0_0(feature));
             },
             click: function(e) {
-                var url = 'https://www.jgojapon.fr/prefectures/' + encodeURIComponent(feature.properties.NAME_1.toLowerCase());
-                window.open(url, '_blank');
-            }
+
+    var prefectureUrls = {
+
+        "Aomori": "https://www.jgojapon.fr/prefectures/aomori",
+        "Chiba": "https://www.jgojapon.fr/prefectures/chiba",
+        "Fukui": "https://www.jgojapon.fr/prefectures/fukui",
+        "Fukuoka": "https://www.jgojapon.fr/prefectures/fukuoka",
+        "Gifu": "https://www.jgojapon.fr/prefectures/gifu",
+        "Gunma": "https://www.jgojapon.fr/prefectures/gunma",
+        "Hiroshima": "https://www.jgojapon.fr/prefectures/hiroshima",
+        "Hokkaido": "https://www.jgojapon.fr/prefectures/hokkaido",
+        "Hyogo": "https://www.jgojapon.fr/prefectures/hyogo",
+        "Ishikawa": "https://www.jgojapon.fr/prefectures/ishikawa",
+        "Kagoshima": "https://www.jgojapon.fr/prefectures/kagoshima",
+        "Kanagawa": "https://www.jgojapon.fr/prefectures/kanagawa",
+        "Kumamoto": "https://www.jgojapon.fr/prefectures/kumamoto",
+        "Kyoto": "https://www.jgojapon.fr/prefectures/kyoto",
+        "Mie": "https://www.jgojapon.fr/prefectures/mie",
+        "Miyazaki": "https://www.jgojapon.fr/prefectures/miyazaki",
+        "Nagano": "https://www.jgojapon.fr/prefectures/nagano",
+        "Nara": "https://www.jgojapon.fr/prefectures/nara",
+        "Niigata": "https://www.jgojapon.fr/prefectures/niigata",
+        "Okinawa": "https://www.jgojapon.fr/prefectures/okinawa",
+        "Osaka": "https://www.jgojapon.fr/prefectures/osaka",
+        "Shiga": "https://www.jgojapon.fr/prefectures/shiga",
+        "Tochigi": "https://www.jgojapon.fr/prefectures/tochigi",
+        "Tokyo": "https://www.jgojapon.fr/prefectures/tokyo",
+        "Wakayama": "https://www.jgojapon.fr/prefectures/wakayama",
+        "Yamagata": "https://www.jgojapon.fr/prefectures/yamagata",
+        "Yamanashi": "https://www.jgojapon.fr/prefectures/yamanashi"
+
+    };
+
+    var url = prefectureUrls[feature.properties.NAME_1];
+
+    if (url) {
+        window.open(url, '_blank');
+    }
+
+}
         });
     }
 }
